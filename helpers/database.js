@@ -1,32 +1,19 @@
-const mariadb = require('mariadb');
+const mysql = require('mysql')
 
-const pool = mariadb.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
-    port: process.env.PORT_DB,
-    connectionLimit: 5
-});
+const conexion = mysql.createConnection({
+    host : process.env.DB_HOST,
+    user : process.env.DB_USER,
+    password : process.env.DB_PASS,
+    port: process.env.DB_PORT,
+    database : process.env.DB_DATABASE,
+})
 
-
-
-// Connect and check for errors
-pool.getConnection((err, connection) => {
-    if (err) {
-        if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-            console.error('Database connection lost');
-        }
-        if (err.code === 'ER_CON_COUNT_ERROR') {
-            console.error('Database has too many connection');
-        }
-        if (err.code === 'ECONNREFUSED') {
-            console.error('Database connection was refused');
-        }
+conexion.connect( (error)=> {
+    if(error){
+        console.log('El error de conexión es: '+error)
+        return
     }
-    if (connection) connection.release();
+    console.log('¡Conectado a la base de datos MySQL!')
+})
 
-    return;
-});
-
-module.exports = pool;
+module.exports = conexion

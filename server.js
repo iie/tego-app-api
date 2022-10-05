@@ -1,27 +1,29 @@
 const express = require('express');
 const dotenv = require('dotenv');
-
-dotenv.config({ path: '.env-local' });
-
-const PORT_APP = process.env.PORT_APP || '3001';
+const cookieParser = require('cookie-parser')
 
 const app = express();
 
-
-/**
- * Middleware
- */
+//Middleware
+//para procesar datos enviados desde forms
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 
-/**
- * Route
- */
+//seteamos las variables de entorno
+dotenv.config({ path: './env/.env' });
 
-const userRouter = require('./routes/user');
-app.use('/', userRouter);
+//para poder trabajar con las cookies
+app.use(cookieParser())
 
-/**Start listening */
-app.listen(PORT_APP, () => {
-    console.log(`Listening for requests on port ${PORT_APP}`)
+//llamar al router
+app.use('/', require('./routes/router'))
+
+//Para eliminar la cache 
+// app.use(function(req, res, next) {
+//     if (!req.user)
+//         res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+//     next();
+// });
+
+app.listen(process.env.APP_PORT, () => {
+    console.log(`Listening for requests on port ${process.env.APP_PORT}`)
 })
