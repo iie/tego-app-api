@@ -1,0 +1,17 @@
+POST http://localhost:3000/register HTTP/1.1
+content-Type: application/json
+
+{
+    "user":"nuevoUser",
+    "name":"Nombre nuevo user",
+    "pass":"clave"
+}
+
+###ggds
+POST http://localhost:3000/login HTTP/1.1
+content-Type: application/json
+
+{
+    "user":"nuevoUser",
+    "pass":"clave"
+}

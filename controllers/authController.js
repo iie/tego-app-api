@@ -27,10 +27,15 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     try {
-        const { user, pass } = req.body;
+
+        const user=req.body.user;
+        const  pass  = req.body.pass;
+
+        console.log(user);
+        console.log(pass);
 
         if (!user || !pass) {
-            res.send("ingrese un usuario y contraseña");
+            res.status(404).send("ingrese un usuario y contraseña");
         } else {
             conexion.query(
                 "SELECT * FROM users WHERE user = ?",
@@ -40,7 +45,7 @@ exports.login = async (req, res) => {
                         results.length == 0 ||
                         !(await bcryptjs.compare(pass, results[0].pass))
                     ) {
-                        res.send("Usuario y/o Password incorrectas");
+                        res.status(500).send("Usuario y/o Password incorrectas");
                     } else {
                         //inicio de sesión OK
                         const id = results[0].id;
@@ -58,8 +63,9 @@ exports.login = async (req, res) => {
                             ),
                             httpOnly: true,
                         };
-                        res.cookie("jwt", token, cookiesOptions);
-                        res.send("¡LOGIN CORRECTO!");
+                        // res.cookie("jwt", token, cookiesOptions);
+                        // res.status(200).send("¡LOGIN CORRECTO!");
+                        res.status(200).json({ auth: true, token });
                     }
                 }
             );

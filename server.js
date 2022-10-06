@@ -6,6 +6,7 @@ const app = express();
 
 //Middleware
 //para procesar datos enviados desde forms
+app.use(express.urlencoded({extended:true}))
 app.use(express.json());
 
 //seteamos las variables de entorno
