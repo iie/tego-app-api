@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcryptjs = require("bcryptjs");
 const conexion = require("../helpers/database");
-// const { promisify } = require("util");
+const { promisify } = require("util");
 
 exports.register = async (req, res) => {
     try {
@@ -28,14 +28,14 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     try {
 
-        const user=req.body.user;
-        const  pass  = req.body.pass;
+        const user = req.body.user;
+        const pass = req.body.pass;
 
         console.log(user);
         console.log(pass);
 
         if (!user || !pass) {
-            res.status(404).send("ingrese un usuario y contraseña");
+            res.status(401).send("Ingrese un usuario y contraseña");
         } else {
             conexion.query(
                 "SELECT * FROM users WHERE user = ?",
@@ -49,60 +49,55 @@ exports.login = async (req, res) => {
                     } else {
                         //inicio de sesión OK
                         const id = results[0].id;
+
+                        //generamos el token
                         const token = jwt.sign({ id: id }, process.env.JWT_SECRETO, {
                             expiresIn: process.env.JWT_TIEMPO_EXPIRA,
                         });
-                        //generamos el token SIN fecha de expiracion
-                        //const token = jwt.sign({id: id}, process.env.JWT_SECRETO)
-                        console.log("TOKEN: " + token + " para el USUARIO : " + user);
 
-                        const cookiesOptions = {
-                            expires: new Date(
-                                Date.now() +
-                                process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
-                            ),
-                            httpOnly: true,
-                        };
-                        // res.cookie("jwt", token, cookiesOptions);
-                        // res.status(200).send("¡LOGIN CORRECTO!");
+                        console.log("TOKEN: " + token + " para el USUARIO : " + user);
                         res.status(200).json({ auth: true, token });
                     }
                 }
             );
         }
     } catch (error) {
+        res.status(500).send('Hubo un problema en el inicio de sesión');
         console.log(error);
     }
 };
 
-// exports.isAuthenticated = async (req, res, next) => {
-//     if (req.cookies.jwt) {
-//         try {
-//             const decodificada = await promisify(jwt.verify)(
-//                 req.cookies.jwt,
-//                 process.env.JWT_SECRETO
-//             );
-//             conexion.query(
-//                 "SELECT * FROM users WHERE id = ?",
-//                 [decodificada.id],
-//                 (error, results) => {
-//                     if (!results) {
-//                         return next();
-//                     }
-//                     req.user = results[0];
-//                     return next();
-//                 }
-//             );
-//         } catch (error) {
-//             console.log(error);
-//             return next();
-//         }
-//     } else {
-//         res.redirect("/login");
-//     }
-// };
-
-exports.logout = (req, res) => {
-    res.clearCookie("jwt");
-    return res.status(200).send();
+exports.isAuthenticated = async (req, res) => {
+    console.log(req.body);
+    console.log(res.body);
+    if (req.body.token) {
+        console.log('avios');
+        try {
+            const decodificada = await promisify(jwt.verify)(
+                req.body.token,
+                process.env.JWT_SECRETO
+            );
+            conexion.query(
+                "SELECT * FROM users WHERE id = ?",
+                [decodificada.id],
+                (error, results) => {
+                    console.log('resultaods');
+                    console.log(results);
+                    if (!results) {
+                        res.status(403).send();
+                    }
+                    res.status(200).send();
+                }
+            );
+        } catch (error) {
+            console.log(error);
+        }
+    } else {
+        res.status(404).send();
+    }
 };
+
+// exports.logout = (req, res) => {
+//     res.clearCookie("jwt");
+//     return res.status(200).send();
+// };

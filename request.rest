@@ -1,3 +1,5 @@
+
+### SE REGISTRA UN NUEVO USUARIO EN LA BASE DE DATOS
 POST http://localhost:3000/register HTTP/1.1
 content-Type: application/json
 
@@ -7,11 +9,19 @@ content-Type: application/json
     "pass":"clave"
 }
 
-###ggds
+### SE INICIA SESIÓN USANDO UN USUARIO REGISTRADO
 POST http://localhost:3000/login HTTP/1.1
 content-Type: application/json
 
 {
     "user":"nuevoUser",
     "pass":"clave"
+}
+
+### SE AUTENTICA UN USUARIO REGISTRADO POR MEDIO DEL TOKEN ALMACENADO EN LOCALSTORAGE DEL DISPOSITIVO
+POST http://localhost:3000/auth HTTP/1.1
+content-type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzcsImlhdCI6MTY2NTI2NTY2OCwiZXhwIjoxNjY1ODcwNDY4fQ.Uqb_Eb2Q6mf1eRppqDifKNhbcADHK6BzRoywfwpgqJg"
 }
