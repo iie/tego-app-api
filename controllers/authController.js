@@ -14,6 +14,7 @@ exports.register = async (req, res) => {
             (error, results) => {
                 if (error) {
                     console.log(error);
+                    res.status(500).send();
                 } else {
                     res.status(201).send(req.body);
                 }
