@@ -3,7 +3,7 @@ const bcryptjs = require("bcryptjs");
 const conexion = require("../helpers/database");
 const { promisify } = require("util");
 
-exports.register = async (req, res) => {
+exports.signIn = async (req, res) => {
     try {
         const { user, name, pass } = req.body;
         const passHash = await bcryptjs.hash(pass, 8);
@@ -26,7 +26,7 @@ exports.register = async (req, res) => {
     }
 };
 
-exports.login = async (req, res) => {
+exports.logIn = async (req, res) => {
     try {
 
         const user = req.body.user;

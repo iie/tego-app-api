@@ -3,7 +3,7 @@
 POST http://localhost:3000/register HTTP/1.1
 content-Type: application/json
 
-{c
+{
     "user":"nuevoUser",
     "name":"Nombre nuevo user",
     "pass":"clave"

@@ -1,6 +1,8 @@
 const express = require('express');
+const morgan=require('morgan');
+const helmet=require('helmet');
 const dotenv = require('dotenv');
-const cookieParser = require('cookie-parser')
+// const cookieParser = require('cookie-parser')
 
 const app = express();
 
@@ -13,7 +15,10 @@ app.use(express.json());
 dotenv.config({ path: './env/.env' });
 
 //para poder trabajar con las cookies
-app.use(cookieParser())
+// app.use(cookieParser())
+
+app.use(helmet());
+app.use(morgan('tiny'));
 
 //llamar al router
 app.use('/', require('./routes/router'))
