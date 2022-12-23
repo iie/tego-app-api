@@ -12,7 +12,7 @@ _Estas instrucciones te permitirán obtener una copia del proyecto en funcionami
 
 **1. Instalación de dependencias**
 
-Una vez clonado el proyecto, se debe instalar las dependencias, para ello se ejecuta el siguiente comando en los directorios **/teleodontoapi** y **/teleodontoweb**
+Una vez clonado el proyecto, se debe instalar las dependencias, para ello se ejecuta el siguiente comando en el direcitorio **/tego-app-api** 
 
 ```
 npm install
