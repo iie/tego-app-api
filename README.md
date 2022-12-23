@@ -21,9 +21,9 @@ npm install
 
 **2. Configurar variables de entorno**
 
-Una vez instaladas las dependencias se configuran los .env para el directorio /tego-app-api
+Una vez instaladas las dependencias se debe configurar el .env 
 
-**/teleodontoapi**
+**/tego-app-api**
 
 ```
 PORT=3005
