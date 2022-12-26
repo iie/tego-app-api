@@ -22,9 +22,15 @@ traerCita = async (req = request, res = response) => {
         type: db.QueryTypes.SELECT
         });
 
-        res.json({
+        if (citaMedica.length === 0){
+          return res.status(400).json({
+            msg: 'El Rut de usuario es incorrecto'
+          })
+        }else{
+            res.json({
             cita: citaMedica
-        })
+            })
+        }
 
     }catch(error){
 
@@ -50,7 +56,7 @@ definirAsistencia = async (req = request, res = response) => {
         });
 
         res.json({
-            respuesta: 'Se ha respondido la asistencia.'
+            respuesta: 'Se ha actualizado la asistencia.'
         })
 
     }catch(error){

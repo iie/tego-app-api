@@ -22,8 +22,6 @@ consultarPorRut = async (req = request, res = response) => {
         type: db.QueryTypes.SELECT
         });
 
-
-
         if(datos[0].uid == null){
             return res.status(400).json({
               msg: 'El Rut de usuario es incorrecto'
@@ -34,8 +32,6 @@ consultarPorRut = async (req = request, res = response) => {
             })
         }
 
-
-
     }catch(error){
 
         console.log(error);
@@ -45,8 +41,6 @@ consultarPorRut = async (req = request, res = response) => {
 
     }
 };
-
-
 
 capsulasPorRut = async (req = request, res = response) => {
     try{
@@ -63,9 +57,15 @@ capsulasPorRut = async (req = request, res = response) => {
         type: db.QueryTypes.SELECT
         });
 
-        res.json({
-            capsulas: capsulas
-        })
+        if (capsulas.length === 0){
+          return res.status(400).json({
+            msg: 'El Rut de usuario es incorrecto'
+          })
+        }else{
+            res.json({
+              capsulas: capsulas
+            })
+        }
 
     }catch(error){
 
