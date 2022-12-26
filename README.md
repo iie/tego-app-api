@@ -6,6 +6,9 @@
 * MariaDB v10.3.34.
 * npm v8.5.5.
 
+### Documentación 📝
+Link de [Documentación API](https://docs.google.com/document/d/1UN0GCcEkkw-XKlFDA1UeEvViUFW8mD1uIjOcvHrUanI/edit?usp=sharing)
+
 ### Instalación en ambiente de desarrollo 🛠️
 _Estas instrucciones te permitirán obtener una copia del proyecto en funcionamiento en tu máquina local para propósitos de desarrollo._
 
