@@ -1,5 +1,6 @@
 const { response, request } = require('express');
 const { db } = require('../database/connection');
+const now = require('moment');
 
 traerCita = async (req = request, res = response) => {
 
@@ -26,12 +27,22 @@ traerCita = async (req = request, res = response) => {
           return res.status(400).json({
             msg: 'El Rut de usuario es incorrecto'
           })
+                   
+        }else if(citaMedica[0].cons_appo_date < now().format('YYYY-MM-DD')){ //Comparacion Fecha de la cita con la fecha actual
+            return res.status(400).json({
+                msg: 'No hay citas disponibles'
+              })
+        
+        }else if(citaMedica[0].cons_appo_date === now().format('YYYY-MM-DD') && citaMedica[0].cons_appo_start <= now().format('HH:mm:ss')) //Comparacion de la hora de la cita con la hora actual
+        {
+            return res.status(400).json({
+                msg: 'No hay citas disponibles'
+              })
         }else{
             res.json({
             cita: citaMedica
             })
         }
-
     }catch(error){
 
         console.log(error);
