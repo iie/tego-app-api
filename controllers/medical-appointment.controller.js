@@ -58,6 +58,21 @@ definirAsistencia = async (req = request, res = response) => {
     try{
 
         const { respuesta, run } = req.body
+        
+        //validar status_id de la persona mediante el run       
+        
+        const validacionStatus = await validarStatusPersona(run);
+
+        if(validacionStatus == undefined){
+            return res.status(400).json({
+                msg: 'El Rut de usuario es incorrecto'
+              })
+        }else if(!validacionStatus){
+            return res.status(400).json({
+                msg: 'El usuario ya realizo una accion'
+              })
+        }
+        
 
         const query = 'UPDATE person SET status_id = ? WHERE run = ? ;';
 
@@ -65,10 +80,10 @@ definirAsistencia = async (req = request, res = response) => {
         replacements: [ respuesta, run ],
         type: db.QueryTypes.UPDATE
         });
-
-        res.json({
-            respuesta: 'Se ha actualizado la asistencia.'
-        })
+        
+        respuesta === 9 
+        ? res.json({respuesta: 'Se confirmó su atencion medica'}) 
+        : res.json({respuesta: 'Se rechazó la atencion medica'}) 
 
     }catch(error){
 
@@ -80,5 +95,28 @@ definirAsistencia = async (req = request, res = response) => {
     }
 }
 
+validarStatusPersona = async (run) =>{
+    
+    const query = 'select status_id from person where run = ?'
+    try{
+        
+        const statusPersona = await db.query(query,{
+            replacements: [run],
+            type: db.QueryTypes.SELECT
+        });
+         
+        if(statusPersona.length === 0){
+            return undefined;
+
+        }else if(statusPersona[0].status_id === 4 || statusPersona[0].status_id === 9 ) return false;
+    
+        return true;
+    }catch(error){
+        console.log(error);
+        res.status(500).json({
+            msg: "Error 500"
+        })
+    }
+}
 
 module.exports = { traerCita, definirAsistencia }
